@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if form.instance.pk %}Edit Post{% else %}Create Post{% endif %}</title>
+     {% load static %}
+    <link rel="stylesheet" href="{% static 'post_form.css' %}">
+</head>
+<body>
+    <h1>{% if form.instance.pk %}Edit Post{% else %}Create Post{% endif %}</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit">{% if form.instance.pk %}Save changes{% else %}Create{% endif %}</button>
+    </form>
+
+    {% if form.errors %}
+        <ul class="error-list">
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <li>{{ field.label }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <p><a href="{% url 'post_list' %}">Back to posts list</a></p>
+</body>
+</html>

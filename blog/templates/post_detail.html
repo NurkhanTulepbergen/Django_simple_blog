@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ post.title }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'post_detail.css' %}">
+</head>
+<body>
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.content }}</p>
+    <p class="post-meta">By: {{ post.author.username }} | Created at: {{ post.created_at }}</p>
+    <a href="{% url 'post_edit' post.id %}">Edit Post</a>
+    <form action="{% url 'post_delete' post.id %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit">Delete Post</button>
+    </form>
+
+    <h2>Comments</h2>
+    <ul>
+        {% for comment in post.comment_set.all %}
+            <li>{{ comment.content }} - {{ comment.author.username }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Add Comment</h3>
+    <form action="{% url 'add_comment' post.id %}" method="post">
+        {% csrf_token %}
+        <textarea name="content" required></textarea>
+        <button type="submit">Add Comment</button>
+    </form>
+
+    <a href="{% url 'post_list' %}">Back to Posts</a>
+</body>
+</html>

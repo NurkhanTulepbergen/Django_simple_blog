@@ -1,0 +1,60 @@
+{% block content %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'profile.css' %}">
+
+    <div class="profile-container">
+        {% if profile.profile_picture %}
+            <img src="{{ profile.profile_picture.url }}" alt="Profile picture" width="150">
+        {% else %}
+            <img src="https://via.placeholder.com/150" alt="Default Profile Picture" width="150">
+        {% endif %}
+
+        <div class="profile-details">
+            <h2>{{ profile.user.username }} {{ profile.user.last_name }}</h2>
+            <p><strong>Bio:</strong> {{ profile.bio }}</p>
+            <a href="{% url 'edit_profile' user_id=user.id %}" class="btn btn-primary">Edit Profile</a>
+
+        </div>
+    </div>
+
+
+    <!-- Profile Edit Form, initially hidden -->
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+
+    {% if user != request.user %}
+        {% if is_following %}
+            <a href="{% url 'unfollow_user' user_id=user.id %}" class="btn btn-danger">Unfollow</a>
+        {% else %}
+            <a href="{% url 'follow_user' user_id=user.id %}" class="btn btn-primary">Follow</a>
+        {% endif %}
+    {% endif %}
+
+    <h3>Followers ({{ followers.count }})</h3>
+    <ul>
+        {% for follower in followers %}
+            <li>{{ follower.follower.username }}</li>
+        {% empty %}
+            <li>No followers</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Following ({{ following.count }})</h3>
+    <ul>
+        {% for followed in following %}
+            <li>{{ followed.following.username }}</li>
+        {% empty %}
+            <li>Not following anyone</li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        document.getElementById('editProfileBtn').addEventListener('click', function() {
+            var form = document.getElementById('editProfileForm');
+            form.style.display = 'block'; // Show the form
+        });
+    </script>
+{% endblock %}

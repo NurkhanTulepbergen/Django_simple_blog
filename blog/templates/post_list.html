@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Posts</title>
+     {% load static %}
+    <link rel="stylesheet" href="{% static 'post_list.css' %}">
+</head>
+<body>
+    <h1>Blog Posts</h1>
+    <a href="{% url 'post_create' %}" class="create-post">Create New Post</a>
+    <ul>
+        {% for post in posts %}
+            <li>
+                <a href="{% url 'post_detail' post.id %}">{{ post.title }}</a>
+                <form action="{% url 'post_delete' post.id %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
