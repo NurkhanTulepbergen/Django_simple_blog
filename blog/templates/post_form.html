@@ -14,7 +14,7 @@
         {% csrf_token %}
         {{ form.as_p }}
 
-        <button type="submit">{% if form.instance.pk %}Save changes{% else %}Create{% endif %}</button>
+        <button type="submit">{% if form.instance.pk %}Save{% else %}Create{% endif %}</button>
     </form>
 
     {% if form.errors %}
@@ -30,6 +30,6 @@
         </ul>
     {% endif %}
 
-    <p><a href="{% url 'post_list' %}">Back to posts list</a></p>
+    <p><a href="{% url 'post_list' %}">Back</a></p>
 </body>
 </html>
